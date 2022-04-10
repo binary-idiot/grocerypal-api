@@ -12,7 +12,7 @@ internal static class ItemEndpoints
         app.MapGet(_baseEndpoint, GetItems);
         app.MapGet($"{_baseEndpoint}/{{id}}", GetItem);
         app.MapPost(_baseEndpoint, PostItem);  
-        app.MapDelete(_baseEndpoint, DeleteItem);
+        app.MapDelete($"{_baseEndpoint}/{{id}}", DeleteItem);
     }
 
     private static async Task<IEnumerable<Item>> GetItems(ItemRepository repo)
