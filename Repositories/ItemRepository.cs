@@ -7,7 +7,7 @@ namespace GroceryPalAPI.Repositories
 
         private readonly Dictionary<string, Item> items = new Dictionary<string, Item>();
 
-        public Task<string> CreateAsync(string name)
+        public Task<string> Create(string name)
         {
             var id = Guid.NewGuid().ToString("N");
 
@@ -31,7 +31,7 @@ namespace GroceryPalAPI.Repositories
             return Task.FromResult<Item>(null);
         }
 
-        public Task<IEnumerable<Item>> GetAllAsync()
+        public Task<IEnumerable<Item>> GetAll()
         {
             var values = items.Select(i => i.Value);
             return Task.FromResult(values);

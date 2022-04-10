@@ -1,6 +1,5 @@
-using GroceryPalAPI.Models;
+using GroceryPalAPI.Endpoints;
 using GroceryPalAPI.Repositories;
-using System.Net;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,28 +21,19 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.MapPost("/item", async (
-        HttpRequest req,
-        HttpResponse resp,
-        ItemRepository repo) =>
+app.Use(async (ctx, next) =>
 {
-    if (!req.HasJsonContentType())
+    try
     {
-        throw new BadHttpRequestException("only application/json supported",
-            (int)HttpStatusCode.NotAcceptable);
+        await next();
     }
-
-    var item = await req.ReadFromJsonAsync<Item>();
-
-    if (item != null || string.IsNullOrWhiteSpace(item.name))
+    catch (BadHttpRequestException ex)
     {
-        throw new BadHttpRequestException("description is required",
-            (int)HttpStatusCode.BadRequest);
+        ctx.Response.StatusCode = ex.StatusCode;
+        await ctx.Response.WriteAsync(ex.Message);
     }
-
-    var id = await repo.CreateAsync(item.name);
-    resp.StatusCode = (int)HttpStatusCode.Created;
-    resp.Headers.Location = $"/todo/{id}";
 });
+
+app.RegisterItemEndpoints();
 
 app.Run();
