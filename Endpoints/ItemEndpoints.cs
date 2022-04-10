@@ -68,6 +68,12 @@ internal static class ItemEndpoints
               (int)HttpStatusCode.BadRequest);
         }
 
-        await repo.Delete(id);
+        var success = await repo.Delete(id);
+
+        if (!success)
+        {
+            throw new BadHttpRequestException("item not found",
+                (int)HttpStatusCode.NotFound);
+        }
     }
 }

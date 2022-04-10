@@ -16,11 +16,11 @@ namespace GroceryPalAPI.Repositories
             return Task.FromResult(id);
         }
 
-        public Task Delete(string id)
+        public Task<bool> Delete(string id)
         {
-            items.Remove(id);
+            var success = items.Remove(id);
 
-            return Task.CompletedTask;
+            return Task.FromResult(success);
         }
 
         public Task<Item> Get(string id)
