@@ -39,7 +39,7 @@ internal static class ItemEndpoints
         return item;
     }
 
-    private static async void PostItem(HttpRequest req, HttpResponse resp, ItemRepository repo)
+    private static async Task<string> PostItem(HttpRequest req, HttpResponse resp, ItemRepository repo)
     {
         if (!req.HasJsonContentType())
         {
@@ -58,6 +58,8 @@ internal static class ItemEndpoints
         var id = await repo.Create(item.name);
         resp.StatusCode = (int)HttpStatusCode.Created;
         resp.Headers.Location = $"/items/{id}";
+
+        return id;
     }
 
     private static async void DeleteItem(string id, ItemRepository repo)
