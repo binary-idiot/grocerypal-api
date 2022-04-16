@@ -2,28 +2,18 @@
 
 namespace GroceryPalAPI.Repositories
 {
-    public class ItemRepository
+    internal class ItemRepository: IRepository<Item>
     {
 
         private readonly Dictionary<string, Item> items = new Dictionary<string, Item>();
 
-        public Task<string> Create(string name)
+        public Task<IEnumerable<Item>> FindAll()
         {
-            var id = Guid.NewGuid().ToString("N");
-
-            items.Add(id, new Item(id, name));
-
-            return Task.FromResult(id);
+            var values = items.Select(i => i.Value);
+            return Task.FromResult(values);
         }
 
-        public Task<bool> Delete(string id)
-        {
-            var success = items.Remove(id);
-
-            return Task.FromResult(success);
-        }
-
-        public Task<Item> Get(string id)
+        public Task<Item> Find(string id)
         {
             if (items.ContainsKey(id))
                 return Task.FromResult(items[id]);
@@ -31,10 +21,26 @@ namespace GroceryPalAPI.Repositories
             return Task.FromResult<Item>(null);
         }
 
-        public Task<IEnumerable<Item>> GetAll()
+        public Task<string> Add(Item entity)
         {
-            var values = items.Select(i => i.Value);
-            return Task.FromResult(values);
+            Item item = entity with { id = Guid.NewGuid().ToString("N") };
+
+            items.Add(item.id, item);
+
+            return Task.FromResult(item.id);
         }
+
+        public Task<Item> Update(Item entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> Remove(string id)
+        {
+            var success = items.Remove(id);
+
+            return Task.FromResult(success);
+        }
+
     }
 }
