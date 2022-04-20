@@ -23,11 +23,11 @@ namespace GroceryPalAPI.Repositories
 
         public Task<string> Add(Item entity)
         {
-            Item item = entity with { id = Guid.NewGuid().ToString("N") };
+            Item item = entity with { itemId = Guid.NewGuid().ToString("N") };
 
-            items.Add(item.id, item);
+            items.Add(item.itemId, item);
 
-            return Task.FromResult(item.id);
+            return Task.FromResult(item.itemId);
         }
 
         public Task<Item> Update(Item entity)

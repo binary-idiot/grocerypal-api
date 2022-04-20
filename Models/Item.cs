@@ -1,3 +1,3 @@
 ﻿namespace GroceryPalAPI.Models;
 
-public record Item(string id, string name);
+public record Item(string itemId, string localId, string name);
