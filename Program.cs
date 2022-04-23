@@ -5,11 +5,15 @@ using Microsoft.EntityFrameworkCore;
 
 IConfiguration config = new ConfigurationBuilder()
     .AddJsonFile("appsettings.json")
+#if DEBUG
+    .AddUserSecrets("dbb48030-81bc-450e-b3e0-a080017d30dd")
+    .AddJsonFile("appsettings.Development.json")
+#endif
     .AddEnvironmentVariables()
     .Build();
 
 string DB_CONNECTION_STRING =
-    $"Host={config.GetSection("Database:Host")};Port={config.GetSection("Database:Port")};Database={config.GetSection("Database:Name")};Username={config["DB_USER"]};Password={config["DB_PASSWORD"]}";
+    $"Server={config["Database:Server"]};Port={config["Database:Port"]};Database={config["Database:Name"]};Username={config["DB_USER"]};Password={config["DB_PASSWORD"]};";
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
