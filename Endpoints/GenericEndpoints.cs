@@ -1,15 +1,18 @@
-﻿using System.Net;
+﻿using Microsoft.EntityFrameworkCore;
+using System.Net;
 
 namespace GroceryPalAPI.Endpoints
 {
-    internal class GenericEndpoints<ModelType, RepositoryType> where RepositoryType : GroceryPalAPI.Repositories.IRepository<ModelType>
+    internal class GenericEndpoints<ModelType, RepositoryType, ContextType> 
+        where RepositoryType : GroceryPalAPI.Repositories.IRepository<ModelType, ContextType> 
+        where ContextType : DbContext
     {
-        internal static async Task<IEnumerable<ModelType>> GetAll(RepositoryType repo)
+        internal static async Task<IEnumerable<ModelType>> GetAll(ContextType db, RepositoryType repo)
         {
-            return await repo.FindAll();
+            return await repo.FindAll(db);
         }
 
-        internal static async Task<ModelType> Get(string id, RepositoryType repo)
+        internal static async Task<ModelType> Get(ContextType db, string id, RepositoryType repo)
         {
             if (string.IsNullOrWhiteSpace(id))
             {
@@ -17,7 +20,7 @@ namespace GroceryPalAPI.Endpoints
                     (int)HttpStatusCode.BadRequest);
             }
 
-            ModelType entity = await repo.Find(id);
+            ModelType entity = await repo.Find(db, id);
 
             if (entity == null)
             {
@@ -27,7 +30,7 @@ namespace GroceryPalAPI.Endpoints
 
             return entity;
         }
-        internal static async Task<string> Post(HttpRequest req, HttpResponse resp, RepositoryType repo)
+        internal static async Task<string> Post(HttpRequest req, HttpResponse resp, ContextType db, RepositoryType repo)
         {
             if (!req.HasJsonContentType())
             {
@@ -43,13 +46,13 @@ namespace GroceryPalAPI.Endpoints
                     (int)HttpStatusCode.BadRequest);
             }
 
-            var id = await repo.Add(entity);
+            var id = await repo.Add(db, entity);
             resp.StatusCode = (int)HttpStatusCode.Created;
 
             return id;
         }
 
-        internal static async void Delete(string id, RepositoryType repo)
+        internal static async void Delete(ContextType db, string id, RepositoryType repo)
         {
             if (string.IsNullOrWhiteSpace(id))
             {
@@ -57,7 +60,7 @@ namespace GroceryPalAPI.Endpoints
                   (int)HttpStatusCode.BadRequest);
             }
 
-            var success = await repo.Remove(id);
+            var success = await repo.Remove(db, id);
 
             if (!success)
             {

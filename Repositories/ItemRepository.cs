@@ -1,45 +1,49 @@
 ﻿using GroceryPalAPI.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace GroceryPalAPI.Repositories
 {
-    internal class ItemRepository: IRepository<Item>
+    internal class ItemRepository: IRepository<Item, GroceryPalContext>
     {
 
-        private readonly Dictionary<string, Item> items = new Dictionary<string, Item>();
+        //private readonly Dictionary<string, Item> items = new Dictionary<string, Item>();
 
-        public Task<IEnumerable<Item>> FindAll()
+        public async Task<IEnumerable<Item>> FindAll(GroceryPalContext db)
         {
-            var values = items.Select(i => i.Value);
-            return Task.FromResult(values);
+            return await db.Items.ToListAsync();
         }
 
-        public Task<Item> Find(string id)
+        public async Task<Item> Find(GroceryPalContext db,string id)
         {
-            if (items.ContainsKey(id))
-                return Task.FromResult(items[id]);
-
-            return Task.FromResult<Item>(null);
+            return await db.Items.FindAsync(id);
         }
 
-        public Task<string> Add(Item entity)
+        public async Task<string> Add(GroceryPalContext db, Item entity)
         {
-            Item item = entity with { itemId = Guid.NewGuid().ToString("N") };
+            entity.ItemId = Guid.NewGuid().ToString("N");
 
-            items.Add(item.itemId, item);
+            await db.Items.AddAsync(entity);
+            await db.SaveChangesAsync();
 
-            return Task.FromResult(item.itemId);
+            return entity.ItemId;
         }
 
-        public Task<Item> Update(Item entity)
+        public Task<Item> Update(GroceryPalContext db, Item entity)
         {
             throw new NotImplementedException();
         }
 
-        public Task<bool> Remove(string id)
+        public async Task<bool> Remove(GroceryPalContext db, string id)
         {
-            var success = items.Remove(id);
+            Item item = await db.Items.FindAsync(id);
+            if (item is null)
+            {
+                return false;
+            }
+            db.Items.Remove(item);
+            await db.SaveChangesAsync();
 
-            return Task.FromResult(success);
+            return true;
         }
 
     }
