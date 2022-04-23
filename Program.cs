@@ -30,6 +30,19 @@ builder.Services.AddSingleton<ItemRepository>();
 
 WebApplication app = builder.Build();
 
+app.Use(async (ctx, next) =>
+{
+    try
+    {
+        await next();
+    }
+    catch (BadHttpRequestException ex)
+    {
+        ctx.Response.StatusCode = ex.StatusCode;
+        await ctx.Response.WriteAsync(ex.Message);
+    }
+});
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -45,18 +58,6 @@ app.UseCors(x => x
     .SetIsOriginAllowed(origin => true) // allow any origin
     .AllowCredentials());
 
-app.Use(async (ctx, next) =>
-{
-    try
-    {
-        await next();
-    }
-    catch (BadHttpRequestException ex)
-    {
-        ctx.Response.StatusCode = ex.StatusCode;
-        await ctx.Response.WriteAsync(ex.Message);
-    }
-});
 
 app.RegisterItemEndpoints();
 
