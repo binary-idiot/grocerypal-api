@@ -12,7 +12,7 @@ namespace GroceryPalAPI.Endpoints
             return await repo.FindAll(db);
         }
 
-        internal static async Task<ModelType> Get(ContextType db, string id, RepositoryType repo)
+        internal static async Task<ModelType?> Get(ContextType db, string id, RepositoryType repo)
         {
             if (string.IsNullOrWhiteSpace(id))
             {
@@ -20,9 +20,9 @@ namespace GroceryPalAPI.Endpoints
                     (int)HttpStatusCode.BadRequest);
             }
 
-            ModelType entity = await repo.Find(db, id);
+            ModelType? entity = await repo.Find(db, id);
 
-            if (entity == null)
+            if (entity is null)
             {
                 throw new BadHttpRequestException("item not found",
                     (int)HttpStatusCode.NotFound);
@@ -38,15 +38,15 @@ namespace GroceryPalAPI.Endpoints
                     (int)HttpStatusCode.NotAcceptable);
             }
 
-            var entity = await req.ReadFromJsonAsync<ModelType>();
+            ModelType? entity = await req.ReadFromJsonAsync<ModelType>();
 
-            if (entity == null /*|| string.IsNullOrWhiteSpace(entity.name)*/)
+            if (entity is null /*|| string.IsNullOrWhiteSpace(entity.name)*/)
             {
                 throw new BadHttpRequestException("entity cannot be null",
                     (int)HttpStatusCode.BadRequest);
             }
 
-            var id = await repo.Add(db, entity);
+            string id = await repo.Add(db, entity);
             resp.StatusCode = (int)HttpStatusCode.Created;
 
             return id;

@@ -13,7 +13,7 @@ namespace GroceryPalAPI.Repositories
             return await db.Items.ToListAsync();
         }
 
-        public async Task<Item> Find(GroceryPalContext db,string id)
+        public async Task<Item?> Find(GroceryPalContext db,string id)
         {
             return await db.Items.FindAsync(id);
         }
@@ -28,14 +28,14 @@ namespace GroceryPalAPI.Repositories
             return entity.ItemId;
         }
 
-        public Task<Item> Update(GroceryPalContext db, Item entity)
+        public Task<Item?> Update(GroceryPalContext db, Item entity)
         {
             throw new NotImplementedException();
         }
 
         public async Task<bool> Remove(GroceryPalContext db, string id)
         {
-            Item item = await db.Items.FindAsync(id);
+            Item? item = await db.Items.FindAsync(id);
             if (item is null)
             {
                 return false;
