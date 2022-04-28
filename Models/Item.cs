@@ -1,8 +1,11 @@
 ﻿namespace GroceryPalAPI.Models;
 
-public class Item
+public class Item : BaseModel
 {
-    public string ItemId { get; set; }
-    public string LocalId { get; set; }
     public string Name { get; set; }
+
+    public Item(Guid? Id, string LocalId, string Name) : base(Id, LocalId)
+    {
+        this.Name = Name;
+    }
 }

@@ -24,12 +24,10 @@ namespace GroceryPalAPI.Repositories
 
         public async Task<string> Add(Item entity)
         {
-            entity.ItemId = Guid.NewGuid().ToString("N");
-
             await _context.Items.AddAsync(entity);
             await _context.SaveChangesAsync();
 
-            return entity.ItemId;
+            return entity.Id.ToString();
         }
 
         public Task<Item?> Update(Item entity)

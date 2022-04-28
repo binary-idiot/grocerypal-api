@@ -37,7 +37,17 @@ namespace GroceryPalAPI.Endpoints
                     (int)HttpStatusCode.NotAcceptable);
             }
 
-            ModelType? entity = await req.ReadFromJsonAsync<ModelType>();
+            ModelType? entity;
+
+            try
+            {
+                entity = await req.ReadFromJsonAsync<ModelType>();
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
 
             if (entity is null /*|| string.IsNullOrWhiteSpace(entity.name)*/)
             {
