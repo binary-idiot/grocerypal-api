@@ -25,7 +25,7 @@ builder.Services.AddCors();
 
 builder.Services.AddDbContext<GroceryPalContext>(options => options.UseNpgsql(DB_CONNECTION_STRING));
 
-builder.Services.AddSingleton<ItemRepository>();
+builder.Services.AddScoped<ItemRepository>();
 
 
 WebApplication app = builder.Build();

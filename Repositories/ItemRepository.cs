@@ -3,47 +3,53 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GroceryPalAPI.Repositories
 {
-    internal class ItemRepository: IRepository<Item, GroceryPalContext>
+    internal class ItemRepository: IRepository<Item>
     {
 
-        //private readonly Dictionary<string, Item> items = new Dictionary<string, Item>();
-
-        public async Task<IEnumerable<Item>> FindAll(GroceryPalContext db)
+        private readonly GroceryPalContext _context;
+        public ItemRepository(GroceryPalContext context)
         {
-            return await db.Items.ToListAsync();
+            _context = context ?? throw new ArgumentNullException("context");
         }
 
-        public async Task<Item?> Find(GroceryPalContext db,string id)
+        public async Task<IEnumerable<Item>> FindAll()
         {
-            return await db.Items.FindAsync(id);
+            return await _context.Items.ToListAsync();
         }
 
-        public async Task<string> Add(GroceryPalContext db, Item entity)
+        public async Task<Item?> Find(string id)
+        {
+            return await _context.Items.FindAsync(id);
+        }
+
+        public async Task<string> Add(Item entity)
         {
             entity.ItemId = Guid.NewGuid().ToString("N");
 
-            await db.Items.AddAsync(entity);
-            await db.SaveChangesAsync();
+            await _context.Items.AddAsync(entity);
+            await _context.SaveChangesAsync();
 
             return entity.ItemId;
         }
 
-        public Task<Item?> Update(GroceryPalContext db, Item entity)
+        public Task<Item?> Update(Item entity)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<bool> Remove(GroceryPalContext db, string id)
+        public async Task<bool> Remove(string id)
         {
-            Item? item = await db.Items.FindAsync(id);
-            if (item is null)
-            {
-                return false;
-            }
-            db.Items.Remove(item);
-            await db.SaveChangesAsync();
+            Item? item = await _context.Items.FindAsync(id);
 
-            return true;
+            if (item is not null)
+            {
+                _context.Items.Remove(item);
+                await _context.SaveChangesAsync();
+
+                return true;
+            }
+
+            return false;
         }
 
     }
