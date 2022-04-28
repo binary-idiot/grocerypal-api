@@ -52,7 +52,7 @@ namespace GroceryPalAPI.Endpoints
             return id;
         }
 
-        internal static async void Delete(ContextType db, string id, RepositoryType repo)
+        internal static async Task Delete(ContextType db, string id, RepositoryType repo)
         {
             if (string.IsNullOrWhiteSpace(id))
             {
