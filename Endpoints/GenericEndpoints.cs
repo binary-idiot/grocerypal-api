@@ -11,13 +11,8 @@ namespace GroceryPalAPI.Endpoints
             return await repo.FindAll();
         }
 
-        internal static async Task<ModelType?> Get(string id, RepositoryType repo)
+        internal static async Task<ModelType?> Get(Guid id, RepositoryType repo)
         {
-            if (string.IsNullOrWhiteSpace(id))
-            {
-                throw new BadHttpRequestException("id is required",
-                    (int)HttpStatusCode.BadRequest);
-            }
 
             ModelType? entity = await repo.Find(id);
 
@@ -61,14 +56,8 @@ namespace GroceryPalAPI.Endpoints
             return id;
         }
 
-        internal static async Task Delete(string id, RepositoryType repo)
+        internal static async Task Delete(Guid id, RepositoryType repo)
         {
-            if (string.IsNullOrWhiteSpace(id))
-            {
-                throw new BadHttpRequestException("id is required",
-                  (int)HttpStatusCode.BadRequest);
-            }
-
             bool success = await repo.Remove(id);
 
             if (!success)

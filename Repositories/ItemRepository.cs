@@ -17,7 +17,7 @@ namespace GroceryPalAPI.Repositories
             return await _context.Items.ToListAsync();
         }
 
-        public async Task<Item?> Find(string id)
+        public async Task<Item?> Find(Guid id)
         {
             return await _context.Items.FindAsync(id);
         }
@@ -35,7 +35,7 @@ namespace GroceryPalAPI.Repositories
             throw new NotImplementedException();
         }
 
-        public async Task<bool> Remove(string id)
+        public async Task<bool> Remove(Guid id)
         {
             Item? item = await _context.Items.FindAsync(id);
 
