@@ -7,7 +7,7 @@ IConfiguration config = new ConfigurationBuilder()
     .AddJsonFile("appsettings.json")
 #if DEBUG
     .AddUserSecrets("dbb48030-81bc-450e-b3e0-a080017d30dd")
-    .AddJsonFile("appsettings.Development.json")
+    .AddJsonFile($"appsettings.{(args.Contains("deploy") ? "Deploy" : "Development")}.json")
 #endif
     .AddEnvironmentVariables()
     .Build();
