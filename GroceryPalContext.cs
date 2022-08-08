@@ -1,4 +1,4 @@
-﻿using GroceryPalAPI.Models;
+﻿using GroceryPalAPI.Modules.Item;
 using Microsoft.EntityFrameworkCore;
 
 namespace GroceryPalAPI

@@ -1,10 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.Net;
+﻿using System.Net;
 
-namespace GroceryPalAPI.Endpoints
+namespace GroceryPalAPI.Modules.Shared
 {
     internal class GenericEndpoints<ModelType, RepositoryType> 
-        where RepositoryType : GroceryPalAPI.Repositories.IRepository<ModelType>
+        where RepositoryType : IRepository<ModelType>
     {
         internal static async Task<IEnumerable<ModelType>> GetAll(RepositoryType repo)
         {

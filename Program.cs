@@ -1,6 +1,5 @@
 using GroceryPalAPI;
-using GroceryPalAPI.Endpoints;
-using GroceryPalAPI.Repositories;
+using GroceryPalAPI.Modules;
 using Microsoft.EntityFrameworkCore;
 
 IConfiguration config = new ConfigurationBuilder()
@@ -25,8 +24,7 @@ builder.Services.AddCors();
 
 builder.Services.AddDbContext<GroceryPalContext>(options => options.UseNpgsql(DB_CONNECTION_STRING));
 
-builder.Services.AddScoped<ItemRepository>();
-
+builder.Services.RegisterModules();
 
 WebApplication app = builder.Build();
 
@@ -58,7 +56,6 @@ app.UseCors(x => x
     .SetIsOriginAllowed(origin => true) // allow any origin
     .AllowCredentials());
 
-
-app.RegisterItemEndpoints();
+app.MapEndpoints();
 
 app.Run();

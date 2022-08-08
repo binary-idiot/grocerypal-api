@@ -1,7 +1,7 @@
-﻿using GroceryPalAPI.Models;
+﻿using GroceryPalAPI.Modules.Shared;
 using Microsoft.EntityFrameworkCore;
 
-namespace GroceryPalAPI.Repositories
+namespace GroceryPalAPI.Modules.Item
 {
     internal class ItemRepository: IRepository<Item>
     {
