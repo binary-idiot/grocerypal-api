@@ -1,3 +1,4 @@
+using GroceryPalAPI.Domain;
 using Microsoft.EntityFrameworkCore;
 
 namespace GroceryPalAPI.Modules.Shared;

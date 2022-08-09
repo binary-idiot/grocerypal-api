@@ -1,4 +1,5 @@
-﻿using GroceryPalAPI.Modules.Item;
+﻿using GroceryPalAPI.Domain;
+using GroceryPalAPI.Modules.Item;
 using Microsoft.EntityFrameworkCore;
 
 namespace GroceryPalAPI
@@ -6,6 +7,6 @@ namespace GroceryPalAPI
     public class GroceryPalContext : DbContext
     {
         public GroceryPalContext(DbContextOptions<GroceryPalContext> options) : base(options) { }
-        public DbSet<Item> Items { get; set; }
+        public DbSet<ItemModel> Items { get; set; }
     }
 }

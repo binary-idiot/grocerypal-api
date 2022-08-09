@@ -1,4 +1,4 @@
-﻿namespace GroceryPalAPI.Modules.Shared
+﻿namespace GroceryPalAPI.Domain
 {
     public abstract class BaseModel
     {

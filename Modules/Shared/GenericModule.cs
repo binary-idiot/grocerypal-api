@@ -1,18 +1,15 @@
 ﻿using System.Net;
+using GroceryPalAPI.Domain;
 
 namespace GroceryPalAPI.Modules.Shared
 {
     internal abstract class GenericModule<ModelType, RepositoryType> : IModule
         where ModelType : BaseModel
-        where RepositoryType : GenericRepository<ModelType>
+        where RepositoryType : IRepository<ModelType>
     {
         protected abstract string BaseEndpoint { get; }
 
-        public virtual IServiceCollection RegisterModule(IServiceCollection services)
-        {
-            services.AddScoped<RepositoryType>();
-            return services;
-        }
+        public abstract IServiceCollection RegisterModule(IServiceCollection services);
 
         public virtual IEndpointRouteBuilder MapEndpoints(IEndpointRouteBuilder endpoints)
         {
