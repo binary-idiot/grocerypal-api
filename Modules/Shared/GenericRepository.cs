@@ -3,29 +3,29 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GroceryPalAPI.Modules.Shared;
 
-internal abstract class GenericRepository<ModelType> : IRepository<ModelType>
-	where ModelType : BaseModel
+internal abstract class GenericRepository<TModelType> : IRepository<TModelType>
+	where TModelType : BaseModel
 {
 	protected readonly GroceryPalContext _context;
-	protected DbSet<ModelType> table;
+	protected DbSet<TModelType> table;
 
 	internal GenericRepository(GroceryPalContext context)
 	{
 		_context = context ?? throw new ArgumentNullException("context");
-		table = _context.Set<ModelType>();
+		table = _context.Set<TModelType>();
 	}
 	
-	public virtual async Task<IEnumerable<ModelType>> FindAll()
+	public virtual async Task<IEnumerable<TModelType>> FindAll()
 	{
 		return await table.ToListAsync();
 	}
 
-	public virtual async Task<ModelType?> Find(Guid id)
+	public virtual async Task<TModelType?> Find(Guid id)
 	{
 		return await table.FindAsync(id);
 	}
 
-	public virtual async Task<string> Add(ModelType entity)
+	public virtual async Task<string> Add(TModelType entity)
 	{
 		await table.AddAsync(entity);
 		await _context.SaveChangesAsync();
@@ -33,14 +33,14 @@ internal abstract class GenericRepository<ModelType> : IRepository<ModelType>
 		return entity.Id.ToString();
 	}
 
-	public virtual Task<ModelType?> Update(ModelType entity)
+	public virtual Task<TModelType?> Update(TModelType entity)
 	{
 		throw new NotImplementedException();
 	}
 
 	public virtual async Task<bool> Remove(Guid id)
 	{
-		ModelType? entity = await table.FindAsync(id);
+		TModelType? entity = await table.FindAsync(id);
 
 		if (entity is not null)
 		{

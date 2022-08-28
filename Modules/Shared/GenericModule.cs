@@ -3,9 +3,9 @@ using GroceryPalAPI.Domain;
 
 namespace GroceryPalAPI.Modules.Shared
 {
-    internal abstract class GenericModule<ModelType, RepositoryType> : IModule
-        where ModelType : BaseModel
-        where RepositoryType : IRepository<ModelType>
+    internal abstract class GenericModule<TModelType, TRepositoryType> : IModule
+        where TModelType : BaseModel
+        where TRepositoryType : IRepository<TModelType>
     {
         protected abstract string BaseEndpoint { get; }
 
@@ -21,14 +21,14 @@ namespace GroceryPalAPI.Modules.Shared
             return endpoints;
         }
         
-        internal virtual async Task<IEnumerable<ModelType>> GetAll(RepositoryType repository)
+        internal virtual async Task<IEnumerable<TModelType>> GetAll(TRepositoryType repository)
         {
             return await repository.FindAll();
         }
 
-        internal virtual async Task<ModelType?> Get(Guid id, RepositoryType repository)
+        internal virtual async Task<TModelType?> Get(Guid id, TRepositoryType repository)
         {
-            ModelType? entity = await repository.Find(id);
+            TModelType? entity = await repository.Find(id);
 
             if (entity is null)
             {
@@ -38,7 +38,7 @@ namespace GroceryPalAPI.Modules.Shared
 
             return entity;
         }
-        internal virtual async Task<string> Post(HttpRequest req, HttpResponse resp, RepositoryType repository)
+        internal virtual async Task<string> Post(HttpRequest req, HttpResponse resp, TRepositoryType repository)
         {
             if (!req.HasJsonContentType())
             {
@@ -46,11 +46,11 @@ namespace GroceryPalAPI.Modules.Shared
                     (int)HttpStatusCode.NotAcceptable);
             }
 
-            ModelType? entity;
+            TModelType? entity;
 
             try
             {
-                entity = await req.ReadFromJsonAsync<ModelType>();
+                entity = await req.ReadFromJsonAsync<TModelType>();
             }
             catch (Exception ex)
             {
@@ -70,7 +70,7 @@ namespace GroceryPalAPI.Modules.Shared
             return id;
         }
 
-        internal virtual async Task Delete(Guid id, RepositoryType repository)
+        internal virtual async Task Delete(Guid id, TRepositoryType repository)
         {
             bool success = await repository.Remove(id);
 

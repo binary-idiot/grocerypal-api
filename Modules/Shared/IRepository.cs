@@ -1,11 +1,11 @@
 ﻿namespace GroceryPalAPI.Modules.Shared
 {
-    internal interface IRepository<ModelType>
+    internal interface IRepository<TModelType>
     {
-        Task<IEnumerable<ModelType>> FindAll();
-        Task<ModelType?> Find(Guid id);
-        Task<string> Add(ModelType entity);
-        Task<ModelType?> Update(ModelType entity);
+        Task<IEnumerable<TModelType>> FindAll();
+        Task<TModelType?> Find(Guid id);
+        Task<string> Add(TModelType entity);
+        Task<TModelType?> Update(TModelType entity);
         Task<bool> Remove(Guid id);
     }
 }
